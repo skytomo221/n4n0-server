@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_18_015150) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_18_031341) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,6 +42,44 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_18_015150) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "authors", force: :cascade do |t|
+    t.string "vrchat_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["vrchat_id"], name: "index_authors_on_vrchat_id", unique: true
+  end
+
+  create_table "photos", force: :cascade do |t|
+    t.bigint "world_id", null: false
+    t.integer "display_order"
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["world_id"], name: "index_photos_on_world_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.bigint "world_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
+    t.index ["world_id"], name: "index_tags_on_world_id"
+  end
+
+  create_table "worlds", force: :cascade do |t|
+    t.string "vrchat_id"
+    t.string "description"
+    t.datetime "release_datetime"
+    t.boolean "hidden"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["vrchat_id"], name: "index_worlds_on_vrchat_id", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "photos", "worlds"
+  add_foreign_key "tags", "worlds"
 end
