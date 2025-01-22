@@ -39,7 +39,7 @@ class WorldsController < ApplicationController
   end
 
   def world_params
-    params.require(:world).permit(:vrchat_id, :name, :author_id, :description, :release_datetime, :hidden)
+    params.require(:world).permit(:vrchat_id, :name, :author_id, :description, :released_at, :hidden)
   end
 
   def author_params

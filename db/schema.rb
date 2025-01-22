@@ -79,7 +79,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_20_143426) do
     t.string "vrchat_id"
     t.string "name"
     t.string "description"
-    t.datetime "release_datetime"
+    t.datetime "released_at"
     t.boolean "hidden"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

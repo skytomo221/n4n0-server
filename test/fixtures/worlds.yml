@@ -3,11 +3,11 @@
 one:
   vrchat_id: MyString
   description: MyString
-  release_datetime: 2025-01-18 03:00:36
+  released_at: 2025-01-18 03:00:36
   hidden: false
 
 two:
   vrchat_id: MyString
   description: MyString
-  release_datetime: 2025-01-18 03:00:36
+  released_at: 2025-01-18 03:00:36
   hidden: false

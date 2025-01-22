@@ -4,7 +4,7 @@ class CreateWorlds < ActiveRecord::Migration[8.0]
       t.string :vrchat_id
       t.string :name
       t.string :description
-      t.datetime :release_datetime
+      t.datetime :released_at
       t.boolean :hidden
 
       t.timestamps

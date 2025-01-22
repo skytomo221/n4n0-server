@@ -5,7 +5,7 @@ class World < ApplicationRecord
   has_many :tags, through: :world_tags
 
   def as_json_with_associations
-    as_json(only: %i[vrchat_id name description release_datetime hidden updated_at],
+    as_json(only: %i[vrchat_id name description release_at hidden updated_at],
             include: {
               author: { only: %i[vrchat_id name] },
               photos: { only: %i[display_order description] },
