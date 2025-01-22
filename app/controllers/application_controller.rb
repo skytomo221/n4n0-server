@@ -8,9 +8,12 @@ class ApplicationController < ActionController::API
   rescue_from JWT::VerificationError, with: :unauthorized
 
   def authenticate_user
-    decoded_token = jwt_decode_user(request.headers)
+    raise UserAuthenticationError unless aministrator?
+  end
 
-    raise UserAuthenticationError unless decoded_token["username"] == ENV["BASIC_AUTH_USER"] && decoded_token["password"] == ENV["BASIC_AUTH_PASSWORD"]
+  def aministrator?
+    decoded_token = jwt_decode_user(request.headers)
+    decoded_token["username"] == ENV["BASIC_AUTH_USER"] && decoded_token["password"] == ENV["BASIC_AUTH_PASSWORD"]
   end
 
   private

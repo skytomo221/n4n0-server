@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
+  get "/authors/:vrchat_id", to: "authors#show"
+  get "/tags/:name", to: "tags#show"
+  get "/worlds/:vrchat_id", to: "worlds#show"
+  get "/photos/:vrchat_id/:display_order", to: "photos#show"
+  post "/photos", to: "photos#create"
+
   resources :authors
+  resources :photos
   resources :tags
   resources :worlds
 

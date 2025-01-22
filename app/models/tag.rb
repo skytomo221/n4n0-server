@@ -1,3 +1,4 @@
 class Tag < ApplicationRecord
-  belongs_to :world
+  has_many :world_tags
+  has_many :worlds, through: :world_tags
 end

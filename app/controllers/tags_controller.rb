@@ -6,7 +6,12 @@ class TagsController < ApplicationController
   end
 
   def show
-    render json: Tag.find(params[:id])
+    @tag = Tag.find_by(name: params[:name])
+    if @tag
+      render json: @tag
+    else
+      render json: { error: "タグが見つかりませんでした。" }, status: :not_found
+    end
   end
 
   def new
@@ -16,6 +21,7 @@ class TagsController < ApplicationController
   end
 
   def create
+    render json: Tag.create(tag_params)
   end
 
   def update
