@@ -1,17 +1,21 @@
-class WorldsController < ApplicationController
-  skip_before_action :authenticate_user, only: %i[index show]
+class WorldGuidesController < ApplicationController
+  skip_before_action :authenticate_user, only: %i[index show sample]
 
   def index
-    render json: World.all.map(&:as_json_with_associations)
+    render json: WorldGuide.joins(:world).map(&:as_json_with_associations)
   end
 
   def show
-    @world = World.find_by(vrchat_id: params[:vrchat_id])
-    if @world
-      render json: @world.as_json_with_associations
+    @world_guide = World.find_by(vrchat_id: params[:vrchat_id])&.world_guide
+    if @world_guide
+      render json: @world_guide.as_json_with_associations
     else
       render json: { error: "ワールドが見つかりませんでした。" }, status: :not_found
     end
+  end
+
+  def sample
+    render json: WorldGuide.joins(:world).sample.as_json_with_associations
   end
 
   def new

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_20_143426) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_24_094048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,21 +42,42 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_20_143426) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "authors", force: :cascade do |t|
-    t.string "vrchat_id"
-    t.string "name"
+  create_table "photos", force: :cascade do |t|
+    t.string "description"
+    t.datetime "taken_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["vrchat_id"], name: "index_authors_on_vrchat_id", unique: true
   end
 
-  create_table "photos", force: :cascade do |t|
-    t.bigint "world_id", null: false
-    t.integer "display_order"
-    t.string "description"
+  create_table "portrait_subjects", force: :cascade do |t|
+    t.bigint "portrait_id", null: false
+    t.bigint "subject_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["world_id"], name: "index_photos_on_world_id"
+    t.index ["portrait_id"], name: "index_portrait_subjects_on_portrait_id"
+    t.index ["subject_id"], name: "index_portrait_subjects_on_subject_id"
+  end
+
+  create_table "portrait_tags", force: :cascade do |t|
+    t.bigint "portrait_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["portrait_id"], name: "index_portrait_tags_on_portrait_id"
+    t.index ["tag_id"], name: "index_portrait_tags_on_tag_id"
+  end
+
+  create_table "portraits", force: :cascade do |t|
+    t.bigint "world_id", null: false
+    t.bigint "photo_id", null: false
+    t.string "title"
+    t.string "description"
+    t.boolean "private"
+    t.datetime "released_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["photo_id"], name: "index_portraits_on_photo_id"
+    t.index ["world_id"], name: "index_portraits_on_world_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -66,32 +87,65 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_20_143426) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "world_tags", force: :cascade do |t|
-    t.bigint "world_id", null: false
+  create_table "users", force: :cascade do |t|
+    t.string "vrchat_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["vrchat_id"], name: "index_users_on_vrchat_id", unique: true
+  end
+
+  create_table "world_guide_photos", force: :cascade do |t|
+    t.bigint "world_guide_id", null: false
+    t.bigint "photo_id", null: false
+    t.integer "display_order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["photo_id"], name: "index_world_guide_photos_on_photo_id"
+    t.index ["world_guide_id"], name: "index_world_guide_photos_on_world_guide_id"
+  end
+
+  create_table "world_guide_tags", force: :cascade do |t|
+    t.bigint "world_guide_id", null: false
     t.bigint "tag_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["tag_id"], name: "index_world_tags_on_tag_id"
-    t.index ["world_id"], name: "index_world_tags_on_world_id"
+    t.index ["tag_id"], name: "index_world_guide_tags_on_tag_id"
+    t.index ["world_guide_id"], name: "index_world_guide_tags_on_world_guide_id"
+  end
+
+  create_table "world_guides", force: :cascade do |t|
+    t.bigint "world_id", null: false
+    t.string "description"
+    t.boolean "private"
+    t.datetime "released_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["world_id"], name: "index_world_guides_on_world_id"
   end
 
   create_table "worlds", force: :cascade do |t|
-    t.string "vrchat_id"
+    t.bigint "author_id", null: false
     t.string "name"
-    t.string "description"
-    t.datetime "released_at"
-    t.boolean "hidden"
+    t.string "vrchat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "author_id", null: false
     t.index ["author_id"], name: "index_worlds_on_author_id"
     t.index ["vrchat_id"], name: "index_worlds_on_vrchat_id", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "photos", "worlds"
-  add_foreign_key "world_tags", "tags"
-  add_foreign_key "world_tags", "worlds"
-  add_foreign_key "worlds", "authors"
+  add_foreign_key "portrait_subjects", "portraits"
+  add_foreign_key "portrait_subjects", "users", column: "subject_id"
+  add_foreign_key "portrait_tags", "portraits"
+  add_foreign_key "portrait_tags", "tags"
+  add_foreign_key "portraits", "photos"
+  add_foreign_key "portraits", "worlds"
+  add_foreign_key "world_guide_photos", "photos"
+  add_foreign_key "world_guide_photos", "world_guides"
+  add_foreign_key "world_guide_tags", "tags"
+  add_foreign_key "world_guide_tags", "world_guides"
+  add_foreign_key "world_guides", "worlds"
+  add_foreign_key "worlds", "users", column: "author_id"
 end

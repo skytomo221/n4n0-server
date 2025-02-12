@@ -3,6 +3,7 @@ class ApplicationController < ActionController::API
 
   class UserAuthenticationError < StandardError; end
 
+  rescue_from ActiveRecord::DeleteRestrictionError, with: :delete_restriction_error
   rescue_from ActiveRecord::RecordInvalid, with: :unprocessable_entity
   rescue_from UserAuthenticationError, with: :unauthorized
   rescue_from JWT::VerificationError, with: :unauthorized
@@ -33,5 +34,9 @@ class ApplicationController < ActionController::API
     decoded_array = JWT.decode(token, Rails.application.credentials.secret_key_base, true, { algorithm: "HS256" })
 
     JSON.parse(decoded_array[0].gsub("=>", ":"))
+  end
+
+  def delete_restriction_error(exception)
+    render json: { error: exception.message }, status: :unprocessable_entity
   end
 end

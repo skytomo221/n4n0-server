@@ -1,5 +1,13 @@
 # Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+# inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+AllCops:
+  DisabledByDefault: true
+  NewCops: enable
+  DefaultFormatter: progress
+
+Layout:
+  Enabled: true
 
 # Overwrite or add rules to create your own house style
 #

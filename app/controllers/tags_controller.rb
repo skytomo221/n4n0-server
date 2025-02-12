@@ -2,13 +2,13 @@ class TagsController < ApplicationController
   skip_before_action :authenticate_user, only: :index
 
   def index
-    render json: Tag.all
+    render json: Tag.all.map(&:as_json_with_associations)
   end
 
   def show
     @tag = Tag.find_by(name: params[:name])
     if @tag
-      render json: @tag
+      render json: @tag.as_json_with_associations
     else
       render json: { error: "タグが見つかりませんでした。" }, status: :not_found
     end

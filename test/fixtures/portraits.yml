@@ -1,7 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  world: one
+  photo: one
+  title: MyString
   description: MyString
+  private: false
 
 two:
+  world: two
+  photo: two
+  title: MyString
   description: MyString
+  private: false

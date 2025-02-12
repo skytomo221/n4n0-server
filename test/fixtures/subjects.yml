@@ -1,7 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  description: MyString
+  world: one
+  subject: one
 
 two:
-  description: MyString
+  world: two
+  subject: two
